@@ -1,4 +1,3 @@
-import audio from "../assets/audio/input_audio.wav";
 interface Audio {
   source: string;
 }

@@ -1,37 +1,45 @@
 import BotMessage from "./BotMessage";
 import UserMessage from "./UserMessage";
-import { userMessages, botMessages } from "../data";
 
-const Messages = () => {
+export type Message = {
+  id: number;
+  name: string;
+  img: string;
+  message: string;
+  type: number; // 0 represents bot; 1 represents user
+};
+
+interface MeesageContainerProps {
+  messages: Message[] | undefined;
+}
+
+const MessageContainer = ({ messages }: MeesageContainerProps) => {
   return (
-    <div className="flex-1 p:2 sm:p-6 justify-between flex flex-col h-screen w-4/5">
+    <div className="flex-1 py-4 justify-between flex flex-col h-screen w-4/5">
       <div
         id="messages"
-        className="flex flex-col space-y-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
+        className="flex flex-col space-y-4 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
       >
-        {userMessages.map((message) => {
-          return (
-            <UserMessage
-              key={message.id}
-              id={message.id}
-              username={message.username}
-              img={message.img}
-              message={message.message}
-            />
-          );
-        })}
-
-        {botMessages.map((message) => {
-          return (
-            <BotMessage
-              key={message.id}
-              id={message.id}
-              name={message.name}
-              img={message.img}
-              message={message.message}
-            />
-          );
-        })}
+        {messages &&
+          messages.map((message) => {
+            return message.type === 0 ? (
+              <BotMessage
+                key={message.id}
+                id={message.id}
+                name={message.name}
+                img={message.img}
+                message={message.message}
+              />
+            ) : (
+              <UserMessage
+                key={message.id}
+                id={message.id}
+                name={message.name}
+                img={message.img}
+                message={message.message}
+              />
+            );
+          })}
 
         {/* <div className="chat-message">
           <div className="flex items-end">
@@ -192,4 +200,4 @@ const Messages = () => {
     </div>
   );
 };
-export default Messages;
+export default MessageContainer;

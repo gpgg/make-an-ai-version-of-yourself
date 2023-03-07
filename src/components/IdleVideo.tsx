@@ -1,4 +1,3 @@
-import video from "../assets/video/input_video.mp4";
 interface IdleVideoProps {
   source: string;
 }

@@ -1,11 +1,11 @@
 interface UserProps {
-  id: string;
-  username: string;
+  id: number;
+  name: string;
   img: string;
   message: string;
 }
 
-const UserMessage = ({ id, username, img, message }: UserProps) => {
+const UserMessage = ({ id, name, img, message }: UserProps) => {
   return (
     <div className="chat-message">
       <div className="flex items-end justify-end">

@@ -1,6 +1,105 @@
-const Input = () => {
+import axios from "axios";
+import { useState } from "react";
+
+import { Message } from "./MessageContainer";
+interface InputProps {
+  setActive: React.Dispatch<React.SetStateAction<boolean>>;
+  setVideoSource: React.Dispatch<React.SetStateAction<string>>;
+  setAudioSource: React.Dispatch<React.SetStateAction<string>>;
+  setMessages: React.Dispatch<React.SetStateAction<Message[] | undefined>>;
+}
+const Input = ({
+  setActive,
+  setVideoSource,
+  setAudioSource,
+  setMessages,
+}: InputProps) => {
+  const [textMessage, setTextMessage] = useState("");
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    // const form = event.target;
+    // const formData = new FormData(form);
+    // console.log(event);
+    // console.log(event.target);
+    // console.log(formData);
+    // const formJson = Object.fromEntries(formData.entries());
+    // console.log(formJson);
+
+    console.log(textMessage);
+    setMessages((messages) => {
+      if (messages) {
+        return [
+          ...messages,
+          {
+            id: messages.length,
+            name: "",
+            img: "",
+            message: textMessage,
+            type: 1,
+          },
+        ];
+      } else {
+        return [{ id: 0, name: "", img: "", message: textMessage, type: 1 }];
+      }
+    });
+
+    // send request
+    axios({
+      method: "post",
+      url: "http://localhost:5000/chat",
+      data: {
+        user_message: textMessage,
+      },
+    })
+      .then(function (response) {
+        console.log(response);
+        if (response.status === 200) {
+          const data = response.data;
+          const botMessage = data.bot_message;
+          console.log(botMessage);
+          setMessages((messages) => {
+            if (messages) {
+              return [
+                ...messages,
+                {
+                  id: messages.length,
+                  name: "",
+                  img: "",
+                  message: botMessage,
+                  type: 0,
+                },
+              ];
+            } else {
+              return [
+                { id: 0, name: "", img: "", message: botMessage, type: 0 },
+              ];
+            }
+          });
+          setActive(true);
+          setVideoSource(data.video_source);
+          setAudioSource(data.audio_source);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    // get reponse
+    // response contains three parts
+    // video url
+    // audio url
+    // reponse text
+
+    // setActive(true);
+    // setVideoSource("");
+    // setAudioSource("");
+
+    // clear user input
+    setTextMessage("");
+  };
+
   return (
-    <form>
+    <form method="post" onSubmit={handleSubmit}>
       <label htmlFor="chat" className="sr-only">
         Your message
       </label>
@@ -45,9 +144,12 @@ const Input = () => {
         </button>
         <textarea
           id="chat"
+          name="text-message"
           rows={1}
           className="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Your message..."
+          value={textMessage}
+          onChange={(e) => setTextMessage(e.target.value)}
         ></textarea>
         <button
           type="submit"
