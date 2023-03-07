@@ -1,6 +1,7 @@
 import BotMessage from "./BotMessage";
 import UserMessage from "./UserMessage";
 import { userMessages, botMessages } from "../data";
+
 const Messages = () => {
   return (
     <div className="flex-1 p:2 sm:p-6 justify-between flex flex-col h-screen w-4/5">
