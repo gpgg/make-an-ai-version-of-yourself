@@ -16,7 +16,7 @@ function App() {
     <div className="flex flex-col items-center justify-center w-screen h-screen">
       <header className="flex-none h-20 w-full">
         <h1 className="text-center text-2xl uppercase font-bold p-4">
-          Build an AI version of yourself
+          Make an AI version of yourself
         </h1>
       </header>
       <div className="flex-none md:w-6/12 w-6/12  h-auto flex flex-col items-center">
