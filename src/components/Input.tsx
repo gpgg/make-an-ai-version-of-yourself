@@ -47,7 +47,7 @@ const Input = ({
     // send request
     axios({
       method: "post",
-      url: "http://localhost:5000/chat",
+      url: "http://localhost:8080/chat",
       data: {
         user_message: textMessage,
       },
@@ -56,8 +56,9 @@ const Input = ({
         console.log(response);
         if (response.status === 200) {
           const data = response.data;
+          console.log(data);
           const botMessage = data.bot_message;
-          console.log(botMessage);
+          // console.log(botMessage);
           setMessages((messages) => {
             if (messages) {
               return [
@@ -77,8 +78,9 @@ const Input = ({
             }
           });
           setActive(true);
-          setVideoSource(data.video_source);
-          setAudioSource(data.audio_source);
+          let timestamp = `?timestamp=${new Date().getTime()}`;
+          setVideoSource(data.video_source + timestamp);
+          setAudioSource(data.audio_source + timestamp);
         }
       })
       .catch(function (error) {
